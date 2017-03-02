@@ -1,4 +1,9 @@
- html {
+ *, *::before, *::after {
+     -moz-box-sizing: border-box;
+     -webkit-box-sizing: border-box;
+     box-sizing: border-box;
+ } 
+html {
      height: 100%;
      font-size: 100%;
  }
@@ -83,6 +88,16 @@
      max-width: 64rem;
  }
 
+.clearfix::before,
+.clearfix::after {
+   content: " ";
+   display: table;
+}
+
+.clearfix::after {
+   clear: both;
+}
+
 
  /* Medium and small screens (640px) */
 @media (min-width: 640px) {
@@ -113,6 +128,7 @@
         float: right; 
     } 
  }
+
  
  /* Large screens (1024px) */
 @media (min-width: 1024px) {
