@@ -53,31 +53,38 @@ var albumPicasso = {
       + '</tr>'
       ;
  
-     return template;
+     return $(template);
  };
 
-// #1 select all HTML elements required to display on album page like title, artist etc. we assign corresponding values of album objects' properties to html objects
+/* #1 select all HTML elements required to display on album page like title, artist etc. we assign corresponding values of album objects' properties to html objects
      var albumTitle = document.getElementsByClassName('album-view-title')[0];
      var albumArtist = document.getElementsByClassName('album-view-artist')[0];
      var albumReleaseInfo = document.getElementsByClassName('album-view-release-info')[0];
      var albumImage = document.getElementsByClassName('album-cover-art')[0];
      var albumSongList = document.getElementsByClassName('album-view-song-list')[0];
-
+*/
 //calls when window loads. takes one of the above album objects as an argument and will use objec'ts stored info by injecting to the template
 
 var setCurrentAlbum = function(album) {
-     // #2 set value of the parent container's firstChild to empy strnig 
-     albumTitle.firstChild.nodeValue = album.title;
-     albumArtist.firstChild.nodeValue = album.artist;
-     albumReleaseInfo.firstChild.nodeValue = album.year + ' ' + album.label;
-     albumImage.setAttribute('src', album.albumArtUrl);
+    var $albumTitle = $('.album-view-title');
+     var $albumArtist = $('.album-view-artist');
+     var $albumReleaseInfo = $('.album-view-release-info');
+     var $albumImage = $('.album-cover-art');
+     var $albumSongList = $('.album-view-song-list'); 
+    // #2 set value of the parent container's firstChild to empy strnig 
+    $albumTitle.text(album.title);
+     $albumArtist.text(album.artist);
+     $albumReleaseInfo.text(album.year + ' ' + album.label);
+     $albumImage.attr('src', album.albumArtUrl);
+
  
      // #3 same as 2, to ensure we work with clean slate
-     albumSongList.innerHTML = '';
+     $albumSongList.empty();
  
      // #4 for loop thru all songs from album object and insert into HTML , pass in song number, name, length as well
      for (var i = 0; i < album.songs.length; i++) {
-         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+         var $newRow = createSongRow(i + 1, album.songs[i].title, album.songs[i].duration);
+         $albumSongList.append($newRow);
      }
  };
  
@@ -95,7 +102,23 @@ var setCurrentAlbum = function(album) {
          }
      });
  };
-
+var findParentByClassName = function(element, targetClass) {
+        if (element) {
+            var currentParent = element.parentElement;
+            var found = false;
+            if (!currentParent) {
+                console.log("No parent found");
+            }
+            while (currentParent.className !== targetClass && currentParent.className !== null) {
+                currentParent = currentParent.parentElement;
+                found = true;
+            }
+            if (!found) {
+                console.log("No parent found with that class name");
+            }
+            return currentParent;
+        }
+    };
 var getSongItem = function(element) {
     switch (element.className) {
         case 'album-song-button':
@@ -171,22 +194,4 @@ window.onload = function() {
 
          });
      }
-    
-    var findParentByClassName = function(element, targetClass) {
-        if (element) {
-            var currentParent = element.parentElement;
-            var found = false;
-            if (!currentParent) {
-                console.log("No parent found");
-            }
-            while (currentParent.className !== targetClass && currentParent.className !== null) {
-                currentParent = currentParent.parentElement;
-                found = true;
-            }
-            if (!found) {
-                console.log("No parent found with that class name");
-            }
-            return currentParent;
-        }
-    };
 };
